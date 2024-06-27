@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mtg_deck_builder/features/build_deck/build_deck_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mtg_deck_builder/models/models.dart';
+import 'package:mtg_deck_builder/widgets/widgets.dart';
 import 'package:scryfall_api/scryfall_api.dart';
 
 class BuildDeckScreen extends StatefulWidget {
@@ -80,41 +80,17 @@ class _DeckView extends StatelessWidget {
               'Cards (${store.cardsInDeck.length})',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            ...cardsWithQty.map(
-              (cardEntry) => _CardTextView(
-                card: cardEntry.key,
-                qty: cardEntry.value,
-              ),
-            ),
+            ...cardsWithQty
+                .map(
+                  (cardEntry) => CardTextView(
+                    card: cardEntry.key,
+                    qty: cardEntry.value,
+                  ),
+                )
+                .expand((l) => [l, const SizedBox(height: 5.0)]),
           ],
         );
       },
-    );
-  }
-}
-
-class _CardTextView extends StatelessWidget {
-  const _CardTextView({
-    required this.card,
-    required this.qty,
-  });
-
-  final MtgCard card;
-  final int qty;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(qty.toString(), style: GoogleFonts.robotoMono()),
-        const SizedBox(width: 5.0),
-        Text(card.name),
-        const Spacer(),
-        Text(
-          'MV ${card.cmc}',
-          style: GoogleFonts.robotoMono(),
-        ),
-      ],
     );
   }
 }
